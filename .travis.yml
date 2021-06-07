@@ -1,5 +1,11 @@
 language: c
 
+os:
+  - linux
+  - osx
+  - freebsd
+  - windows
+
 # Build matrix
 compiler:
   - gcc
@@ -20,8 +26,13 @@ before_install:
   - if [[ $CC == gcc ]] ; then export CXX=g++ ; else export CXX=clang++ ; fi
   - $CC --version
   - $CXX --version
-  - gem install coveralls-lcov
-  - if [ "$CC" = "gcc" ]; then export WITH_GCOV=ON; else WITH_GCOV=OFF; fi
+  - |-
+    case $TRAVIS_OS_NAME in
+      linux)
+        gem install coveralls-lcov
+        if [ "$CC" = "gcc" ]; then export WITH_GCOV=ON; else WITH_GCOV=OFF; fi
+        ;;
+    esac
 
 script:
   - mkdir -p build
@@ -31,7 +42,7 @@ script:
   - ctest --output-on-failure
 
 after_success:
-  - if [ "$CC" = "gcc" ];
+  - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CC" = "gcc" ];
     then
       lcov -d tests -d src -d tools -base-directory .. -c -o coverage.info;
       lcov --remove coverage.info '/usr/*' -o coverage.info;
