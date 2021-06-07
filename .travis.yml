@@ -2,9 +2,9 @@ language: c
 
 os:
   - linux
-  - osx
-  - freebsd
   - windows
+# - osx
+# - freebsd
 
 # Build matrix
 compiler:
@@ -31,6 +31,12 @@ before_install:
       linux)
         gem install coveralls-lcov
         if [ "$CC" = "gcc" ]; then export WITH_GCOV=ON; else WITH_GCOV=OFF; fi
+        ;;
+      windows)
+        choco install cygwin
+        C:\\tools\\cygwin\\cygwinsetup.exe -q -P cygwin,cygwin-devel,make,cmake,gcc,gcc-g++,clang,findutils,grep,sed,perl
+        ls /usr/include
+        ls /usr/lib
         ;;
     esac
 
