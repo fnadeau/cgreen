@@ -35,11 +35,11 @@ before_install:
       windows)
         choco install cygwin
         C:\\tools\\cygwin\\cygwinsetup.exe -q -P cygwin,cygwin-devel,make,cmake,gcc,gcc-g++,clang,findutils,grep,sed,perl,tree
-        tree /
         export PATH=/C/tools/bin:/cygdrive/c/tools/bin:$PATH:/C/tools/cygwin/bin:/cygdrive/c/tools/cygwin/bin
         CI_TRACE=true
         CI_TIME=false
         export CI_TRACE CI_TIME
+        tree /
         ;;
     esac
 
