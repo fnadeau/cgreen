@@ -26,6 +26,7 @@ before_install:
   - if [[ $CC == gcc ]] ; then export CXX=g++ ; else export CXX=clang++ ; fi
   - $CC --version
   - $CXX --version
+  - export build_prefix=""
   - |-
     case $TRAVIS_OS_NAME in
       linux)
@@ -33,22 +34,34 @@ before_install:
         if [ "$CC" = "gcc" ]; then export WITH_GCOV=ON; else WITH_GCOV=OFF; fi
         ;;
       windows)
-        choco install cygwin
-        C:\\tools\\cygwin\\cygwinsetup.exe -q -P cygwin,cygwin-devel,make,cmake,gcc,gcc-g++,clang,findutils,grep,sed,perl,tree
-        export PATH=/C/tools/bin:/cygdrive/c/tools/bin:$PATH:/C/tools/cygwin/bin:/cygdrive/c/tools/cygwin/bin
-        CI_TRACE=true
-        CI_TIME=false
-        export CI_TRACE CI_TIME
-        tree /
+        [[ ! -f C:/tools/msys64/msys2_shell.cmd ]] && rm -rf C:/tools/msys64
+        choco uninstall -y mingw
+        choco upgrade --no-progress -y msys2 bazel
+        export msys2='cmd //C RefreshEnv.cmd '
+        export msys2+='& set MSYS=winsymlinks:nativestrict '
+        export msys2+='& C:\\tools\\msys64\\msys2_shell.cmd -defterm -no-start'
+        export shell="$msys2 -mingw64 -full-path -here -c \$\* --"
+        export msys2+=" -msys2 -c \$\* --"
+        $msys2 pacman --sync --noconfirm --needed \
+                mingw-w64-x86_64-libtool \
+                mingw-w64-x86_64-toolchain \
+                cmake \
+                make \
+                gcc \
+                clang
+        taskkill //IM gpg-agent.exe //F
+        export CPPFLAGS=-D__USE_MINGW_ANSI_STDIO=1
+        export PATH=/C/tools/msys64/mingw64/bin:$PATH
+        export build_prefix="$msys2"
         ;;
     esac
 
 script:
   - mkdir -p build
   - cd build
-  - cmake -DCGREEN_WITH_UNIT_TESTS:BOOL=ON -DCGREEN_WITH_STATIC_LIBRARY:BOOL=$CGREEN_WITH_STATIC_LIBRARY -DCGREEN_INTERNAL_WITH_GCOV:BOOL=$WITH_GCOV ..
-  - make -j2
-  - ctest --output-on-failure
+  - $build_prefix cmake -DCGREEN_WITH_UNIT_TESTS:BOOL=ON -DCGREEN_WITH_STATIC_LIBRARY:BOOL=$CGREEN_WITH_STATIC_LIBRARY -DCGREEN_INTERNAL_WITH_GCOV:BOOL=$WITH_GCOV ..
+  - $build_prefix make -j2
+  - $build_prefix ctest --output-on-failure
 
 after_success:
   - if [ "$TRAVIS_OS_NAME" = "linux" ] && [ "$CC" = "gcc" ];
