@@ -67,9 +67,47 @@ You can also clone the repository or download the source zip from [GitHub](http:
 You need the [CMake](http://www.cmake.org) build system.
 Most standard C/C++ compilers should work. GCC definitely does.
 
+Perl, diff, find and sed are quired to run some unit-tests. Most distro will have
+those already installed.
+
+cgreen-runner is currently only build for POSIX compatible system. To build
+cgreen-runner, you need binutils development package and/or GNU libc. At runtime,
+cgreen-runner only requires binutils library and/or GNU libc. Some distro do not
+distinguish the two binutils-dev from binutils.
+
+|Distro | Build | Run |
+--- | --- | ---
+|Arch|GNU libc|GNU libc|
+|Cygwin|cygwin64-libbfd|cygwin64-libbfd|
+|Minsys2|cygwin64-libbfd|cygwin64-libbfd|
+|Debian|GNU libc|GNU libc|
+|Fedora|GNU libc|GNU libc|
+|OpenSUSE|GNU libc|GNU libc|
+|FreeBSD|libbfd|libbfd|
+|macOS X|binutils|binutils|
+
+Valgrind is required to run for some unit tests. Currently, only cgreen-runner's
+tests are analyzed by valgrind.
+
 In the root directory run ``make``. That will configure and build the
 library and the `cgreen-runner`, both supporting both C and C++. See
-also the documentation.
+also the documentation. The later will only be build if build requirements are met.
+
+Here are some example of how to build using docker for various distro:
+
+```
+# debian build
+$ docker run --rm -v $PWD:/cgreen debian bash -c \
+    "apt update && apt -y install git cmake gcc g++  && cd /cgreen && make unit test"
+
+# Fedora
+$ docker run -t --rm -v $PWD:/cgreen fedora bash -c \
+    "/usr/bin/yum -y install cmake gcc g++ git diffutils findutils && cd /cgreen && make unit test && make clean"
+
+# OpenSUSE
+$ docker run --rm -v $PWD:/cgreen opensuse/tumbleweed bash -c \
+    '/usr/bin/zypper refresh && /usr/bin/zypper --non-interactive install git cmake gcc gcc-c++ git diffutils findutils  && cd /cgreen && make unit test && make clean'
+```
 
 ## Using It
 

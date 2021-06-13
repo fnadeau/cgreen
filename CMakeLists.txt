@@ -82,20 +82,16 @@ configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 add_subdirectory(doc)
 add_subdirectory(include)
 add_subdirectory(src)
-if (UNIX OR MSYS)
-  # reflective runner only supported on UNIX/binutils platforms
-  add_subdirectory(tools)
-endif(UNIX OR MSYS)
+add_subdirectory(tools)
 # add_subdirectory(samples)
 
 if (CGREEN_WITH_UNIT_TESTS)
   include(MacroAddUnitTest)
   include(MacroAddTest)
   add_subdirectory(tests)
-  if (UNIX OR MSYS)
-    # reflective runner only supported on UNIX/binutils platforms
+  if (HAVE_CGREEN_RUNNER)
     add_subdirectory(tools/tests)
-  endif(UNIX OR MSYS)
+  endif(HAVE_CGREEN_RUNNER)
 endif (CGREEN_WITH_UNIT_TESTS)
 
 # add custom 'check' target to run tests with output-on-failure

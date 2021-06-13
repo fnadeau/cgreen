@@ -8,7 +8,7 @@ Describe(Discoverer);
 BeforeEach(Discoverer) {}
 AfterEach(Discoverer) {}
 
-static bool verbose = false;
+static bool verbose = true;
 
 static int count_tests_in(const char *filename) {
     char command[1000];
@@ -24,13 +24,7 @@ static int count_tests_in(const char *filename) {
 }
 
 Ensure(Discoverer, reads_a_library_and_finds_the_tests) {
-    char filename[] = "libdiscoverer_unit_tests.so";
+    char filename[] = "libcgreen_runner_tests.so";
     CgreenVector *tests = discover_tests_in(filename, verbose);
     assert_that(cgreen_vector_size(tests), is_equal_to(count_tests_in(filename)));
-}
-
-TestSuite *discoverer_acceptance_tests(void) {
-    TestSuite *suite = create_test_suite();
-    add_test_with_context(suite, Discoverer, reads_a_library_and_finds_the_tests);
-    return suite;
 }

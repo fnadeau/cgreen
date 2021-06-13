@@ -90,6 +90,7 @@ DIFF_TOOL_ARGUMENTS = $(1)_tests \
 	../../tests \
 	$(1)_tests.expected
 
+.PHONY: unit
 unit: build-it
 	cd build ; \
 	$(LDPATH) tools/cgreen-runner -c `find tests -name $(PREFIX)cgreen_c_tests$(SUFFIX)` ; \

@@ -1,0 +1,19 @@
+#include "dl_adapter.h"
+
+#include <cgreen/cgreen.h>
+#include <cgreen/mocks.h>
+
+/* Adapter to dl */
+void *dl_adapter_open(const char *filename, int flag) {
+    return (void *) mock(filename, flag);
+}
+
+int dl_adapter_close(void *handle)
+{
+    return (int) mock(handle);
+}
+
+int dl_adapter_info(void *handle, int request, void *p)
+{
+    return (int) mock(handle, request, p);
+}
