@@ -70,6 +70,7 @@ before_install:
                 git \
                 binutils \
                 msys2-runtime-devel \
+                libiconv-devel \
                 zlib-devel
         taskkill //IM gpg-agent.exe //F
         export CPPFLAGS=-D__USE_MINGW_ANSI_STDIO=1
