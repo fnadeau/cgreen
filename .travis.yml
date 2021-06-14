@@ -30,8 +30,6 @@ jobs:
   - os: linux
   - os: osx
   - os: freebsd
-  - os: windows
-    compiler: clang
 
 before_install:
   - if [[ $CC == gcc ]] ; then export CXX=g++ ; else export CXX=clang++ ; fi
@@ -62,10 +60,11 @@ before_install:
                 cmake \
                 make \
                 gcc \
+                clang \
                 git \
                 binutils \
                 msys2-runtime-devel \
-                zlib
+                zlib-devel
         taskkill //IM gpg-agent.exe //F
         export CPPFLAGS=-D__USE_MINGW_ANSI_STDIO=1
         export PATH=/C/tools/msys64/mingw64/bin:$PATH
