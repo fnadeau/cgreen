@@ -3,8 +3,10 @@ language: c
 os:
   - linux
   - windows
-# - osx
-# - freebsd
+  - osx
+  - freebsd
+
+dist: xenial
 
 # Build matrix
 compiler:
@@ -22,6 +24,14 @@ addons:
     - lcov
     - g++
     - binutils-dev
+
+jobs:
+  exclude:
+  - os: linux
+  - os: osx
+  - os: freebsd
+  - os: windows
+    compiler: clang
 
 before_install:
   - if [[ $CC == gcc ]] ; then export CXX=g++ ; else export CXX=clang++ ; fi
@@ -48,14 +58,14 @@ before_install:
         export shell="$msys2 -mingw64 -full-path -here -c \$\* --"
         export msys2+=" -msys2 -c \$\* --"
         $msys2 pacman --sync --noconfirm --needed \
-                mingw-w64-x86_64-libtool \
-                mingw-w64-x86_64-toolchain \
+                libtool \
                 cmake \
                 make \
                 gcc \
-                clang \
+                git \
                 binutils \
-                msys2-runtime-devel
+                msys2-runtime-devel \
+                zlib
         taskkill //IM gpg-agent.exe //F
         export CPPFLAGS=-D__USE_MINGW_ANSI_STDIO=1
         export PATH=/C/tools/msys64/mingw64/bin:$PATH
