@@ -30,6 +30,8 @@ jobs:
   - os: linux
   - os: osx
   - os: freebsd
+  - os: windows
+    compiler: clang
 
 before_install:
   - if [[ $CC == gcc ]] ; then export CXX=g++ ; else export CXX=clang++ ; fi

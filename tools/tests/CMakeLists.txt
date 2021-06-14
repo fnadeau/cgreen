@@ -90,7 +90,9 @@ if(LibBfd_FOUND)
   add_library(${DISCOVERER_BFD_UNIT_TESTS_LIBRARY} SHARED ${DISCOVERER_BFD_UNIT_TESTS_SRCS})
 
   target_compile_definitions(${DISCOVERER_BFD_UNIT_TESTS_LIBRARY} PUBLIC UNITTESTING)
-  target_link_libraries(${DISCOVERER_BFD_UNIT_TESTS_LIBRARY} ${CMAKE_DL_LIBS})
+  target_link_libraries(${DISCOVERER_BFD_UNIT_TESTS_LIBRARY}
+    ${CGREEN_SHARED_LIBRARY}
+    ${LIBBFD_LIBRARIES})
 
   SET(DISCOVERER_BFD_ACCEPTANCE_TESTS_LIBRARY "$<TARGET_FILE_DIR:discoverer_bfd_acceptance_tests>/$<TARGET_FILE_NAME:discoverer_bfd_acceptance_tests>")
   SET(DISCOVERER_BFD_UNIT_TESTS_LIBRARY "$<TARGET_FILE_DIR:discoverer_bfd_unit_tests>/$<TARGET_FILE_NAME:discoverer_bfd_unit_tests>")
@@ -132,7 +134,9 @@ if(HAVE_DLINFO)
   add_library(${DISCOVERER_DL_UNIT_TESTS_LIBRARY} SHARED ${DISCOVERER_DL_UNIT_TESTS_SRCS})
 
   target_compile_definitions(${DISCOVERER_DL_UNIT_TESTS_LIBRARY} PUBLIC UNITTESTING _GNU_SOURCE)
-  target_link_libraries(${DISCOVERER_DL_UNIT_TESTS_LIBRARY} ${CMAKE_DL_LIBS})
+  target_link_libraries(${DISCOVERER_DL_UNIT_TESTS_LIBRARY}
+    ${CGREEN_SHARED_LIBRARY}
+    ${CMAKE_DL_LIBS})
 
   SET(DISCOVERER_DL_ACCEPTANCE_TESTS_LIBRARY "$<TARGET_FILE_DIR:discoverer_dl_acceptance_tests>/$<TARGET_FILE_NAME:discoverer_dl_acceptance_tests>")
   SET(DISCOVERER_DL_UNIT_TESTS_LIBRARY "$<TARGET_FILE_DIR:discoverer_dl_unit_tests>/$<TARGET_FILE_NAME:discoverer_dl_unit_tests>")
