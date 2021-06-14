@@ -57,6 +57,10 @@ before_install:
         export msys2+=" -msys2 -c \$\* --"
         $msys2 pacman --sync --noconfirm --needed \
                 libtool \
+                diffutils \
+                sed \
+                perl \
+                findutils \
                 cmake \
                 make \
                 gcc \
