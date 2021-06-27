@@ -68,6 +68,7 @@ before_install:
                 gcc \
                 clang \
                 git \
+                gettext-devel \
                 binutils \
                 msys2-runtime-devel \
                 libiconv-devel \
